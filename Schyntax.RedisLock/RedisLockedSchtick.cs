@@ -25,6 +25,7 @@ namespace Schyntax.RedisLock
             string name,
             string schedule,
             ScheduledTaskCallback callback,
+            Func<ScheduledTask, DateTime, bool> shouldTryToRun = null,
             bool autoRun = true,
             TimeSpan window = default(TimeSpan),
             bool skipIfSlowCallback = true)
@@ -48,7 +49,7 @@ namespace Schyntax.RedisLock
 
             return _schtick.AddTask(
                 schedule,
-                CreateWrappedCallback(name, callback, window),
+                CreateWrappedCallback(name, callback, window, shouldTryToRun),
                 autoRun,
                 name,
                 lastRun,
@@ -73,7 +74,7 @@ end
 ";
         private static readonly LuaScript s_redisLockScript = LuaScript.Prepare(REDIS_LOCK_SCRIPT_BODY);
 
-        private ScheduledTaskCallback CreateWrappedCallback(string name, ScheduledTaskCallback originalCallback, TimeSpan window)
+        private ScheduledTaskCallback CreateWrappedCallback(string name, ScheduledTaskCallback originalCallback, TimeSpan window, Func<ScheduledTask, DateTime, bool> shouldTryToRun)
         {
             // set the redis lock for one hour longer than the window
             var px = (int)((window > TimeSpan.Zero ? window : TimeSpan.Zero) + TimeSpan.FromHours(1)).TotalMilliseconds;
@@ -82,25 +83,21 @@ end
 
             return (task, timeIntendedToRun) =>
             {
+                if (!shouldTryToRun(task, timeIntendedToRun))
+                    return;
+
                 // see if we can get the lock on this task
                 var iso = timeIntendedToRun.ToString("o");
                 RedisKey lockKey = _keyPrefix + ";" + name + ";" + iso;
                 var lastLockValue = iso + ";" + DateTime.UtcNow.ToString("o") + ";" + host;
+                
+                var db = _getRedisDb();
+                var lockAcquired = (int)db.ScriptEvaluate(s_redisLockScript, new { lockKey, host, px, lastKey, name, lastLockValue });
 
-                try
-                { 
-                    var db = _getRedisDb();
-                    var lockAcquired = (int)db.ScriptEvaluate(s_redisLockScript, new { lockKey, host, px, lastKey, name, lastLockValue });
-
-                    if (lockAcquired == 1)
-                    {
-                        // we got the lock, now run the task
-                        originalCallback(task, timeIntendedToRun);
-                    }
-                }
-                catch (Exception ex)
+                if (lockAcquired == 1)
                 {
-                    Debug.WriteLine(ex);
+                    // we got the lock, now run the task
+                    originalCallback(task, timeIntendedToRun);
                 }
             };
         }

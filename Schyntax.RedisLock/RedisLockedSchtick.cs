@@ -7,7 +7,8 @@ namespace Schyntax.RedisLock
 {
     public class RedisLockedSchtick
     {
-        private readonly Schtick _schtick = new Schtick();
+        public Schtick Schtick { get; } = new Schtick();
+
         private readonly Func<IDatabase> _getRedisDb;
         private readonly string _machineName;
         private readonly string _keyPrefix;
@@ -47,7 +48,7 @@ namespace Schyntax.RedisLock
                 }
             }
 
-            return _schtick.AddTask(
+            return Schtick.AddTask(
                 schedule,
                 CreateWrappedCallback(name, callback, window, shouldTryToRun),
                 autoRun,
@@ -60,7 +61,7 @@ namespace Schyntax.RedisLock
 
         public bool RemoveTask(ScheduledTask task)
         {
-            return _schtick.RemoveTask(task);
+            return Schtick.RemoveTask(task);
         }
 
         private const string REDIS_LOCK_SCRIPT_BODY = @"

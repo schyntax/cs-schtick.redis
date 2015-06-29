@@ -35,7 +35,7 @@ platform: Any CPU
 configuration: Release
 
 build:
-  project: Schyntax.RedisLock.sln
+  project: Schyntax.RedisLock\Schyntax.RedisLock.csproj
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: normal

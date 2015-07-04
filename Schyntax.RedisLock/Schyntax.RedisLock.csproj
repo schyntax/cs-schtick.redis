@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Schyntax, Version=0.10.1.14, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Schyntax.0.10.1\lib\net45\Schyntax.dll</HintPath>
+    <Reference Include="Schyntax, Version=0.10.2.17, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Schyntax.0.10.2\lib\net45\Schyntax.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">

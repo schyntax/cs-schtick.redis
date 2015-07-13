@@ -9,18 +9,24 @@ namespace Schyntax.RedisLock.Tests
     [TestFixture]
     public class Tests
     {
+        private class Combo
+        {
+            public Schtick Schtick { get; set; }
+            public RedisSchtickWrapper Wrapper { get; set; }
+        }
+
         [Test]
         public void BasicTest()
         {
             var redis = ConnectionMultiplexer.Connect("localhost:6379");
-            var schticks = CreateSchtickArray(4, () => redis.GetDatabase());
+            var combos = CreateCombosArray(4, () => redis.GetDatabase());
 
             var locker = new object();
             var runs = new HashSet<DateTime>();
             var runCount = 0;
 
             // add a task and make sure it only executes on one "server"
-            var tasks = AddTaskMulti("basic", "sec(*)", schticks, (task, run) =>
+            var tasks = AddTaskMulti("basic", "sec(*)", combos, (task, run) =>
             {
                 lock (locker)
                 {
@@ -33,7 +39,7 @@ namespace Schyntax.RedisLock.Tests
 
             foreach (var t in tasks)
             {
-                t.Stop();
+                t.StopSchedule();
             }
 
             Assert.IsTrue(runs.Count == runCount, $"runs.Count ({runs.Count}) was expected to be equal to runCount ({runCount}).");
@@ -41,23 +47,29 @@ namespace Schyntax.RedisLock.Tests
             Assert.IsTrue(runs.Count <= 3, $"runs.Count was {runs.Count}. Expected no more than 3.");
         }
 
-        private static RedisLockedSchtick[] CreateSchtickArray(int count, Func<IDatabase> getDb)
+        private static Combo[] CreateCombosArray(int count, Func<IDatabase> getDb)
         {
-            var schticks = new RedisLockedSchtick[count];
+            var combos = new Combo[count];
             for (var i = 0; i < count; i++)
             {
-                schticks[i] = new RedisLockedSchtick(getDb, "test-" + i);
+                combos[i] = new Combo()
+                {
+                    Wrapper = new RedisSchtickWrapper(getDb, "test-" + i),
+                    Schtick = new Schtick(),
+                };
             }
 
-            return schticks;
+            return combos;
         }
 
-        private static ScheduledTask[] AddTaskMulti(string name, string schedule, RedisLockedSchtick[] schticks, ScheduledTaskCallback callback)
+        private static ScheduledTask[] AddTaskMulti(string name, string schedule, Combo[] combos, ScheduledTaskCallback callback)
         {
-            var tasks = new ScheduledTask[schticks.Length];
-            for (var i = 0; i < schticks.Length; i++)
+            var tasks = new ScheduledTask[combos.Length];
+            for (var i = 0; i < combos.Length; i++)
             {
-                 tasks[i] = schticks[i].AddTask(name, schedule, callback);
+                var schtick = combos[i].Schtick;
+                var wrapper = combos[i].Wrapper;
+                tasks[i] = schtick.AddTask(name, schedule, wrapper.Wrap(callback));
             }
 
             return tasks;

@@ -61,7 +61,7 @@ namespace Schyntax.RedisLock
             return GetWrappedCallback(callback, null, shouldTryToRun);
         }
         
-        public ScheduledTaskAsyncCallback Wrap(ScheduledTaskAsyncCallback asyncCallback, Func<ScheduledTask, DateTime, bool> shouldTryToRun = null)
+        public ScheduledTaskAsyncCallback WrapAsync(ScheduledTaskAsyncCallback asyncCallback, Func<ScheduledTask, DateTime, bool> shouldTryToRun = null)
         {
             if (asyncCallback == null)
                 throw new ArgumentNullException(nameof(asyncCallback));

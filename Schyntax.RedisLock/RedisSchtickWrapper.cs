@@ -69,6 +69,17 @@ namespace Schyntax.RedisLock
             return GetWrappedCallback(null, asyncCallback, shouldTryToRun);
         }
 
+        private const string REDIS_LOCK_SCRIPT_BODY = @"
+if redis.call('set', @lockKey, @host, 'nx', 'px', @px)
+then
+    redis.call('hset', @lastKey, @name, @lastLockValue)
+    return 1
+else
+    return 0
+end
+";
+        private static readonly LuaScript s_redisLockScript = LuaScript.Prepare(REDIS_LOCK_SCRIPT_BODY);
+
         private ScheduledTaskAsyncCallback GetWrappedCallback(
             ScheduledTaskCallback originalCallback, 
             ScheduledTaskAsyncCallback originalAsyncCallback, 
@@ -89,20 +100,14 @@ namespace Schyntax.RedisLock
                 // set the redis lock for one hour longer than the window
                 var window = task.Window;
                 var expiry = (window > TimeSpan.Zero ? window : TimeSpan.Zero) + TimeSpan.FromHours(1);
+                var px = expiry.TotalMilliseconds;
 
                 // see if we can get the lock on this task
                 var db = _getRedisDb();
-                var tran = db.CreateTransaction();
-                tran.AddCondition(Condition.KeyNotExists(lockKey));
+                var name = task.Name;
+                var lockAcquired = await db.ScriptEvaluateAsync(s_redisLockScript, new { lockKey, host, px, lastKey, name, lastLockValue });
 
-#pragma warning disable 4014 // disable warning about not awaiting these tasks
-                tran.StringSetAsync(lockKey, host, expiry);
-                tran.HashSetAsync(lastKey, task.Name, lastLockValue);
-#pragma warning restore 4014
-
-                var committed = await tran.ExecuteAsync();
-
-                if (committed)
+                if ((int)lockAcquired == 1)
                 {
                     // we got the lock, now run the task
                     if (originalCallback != null)

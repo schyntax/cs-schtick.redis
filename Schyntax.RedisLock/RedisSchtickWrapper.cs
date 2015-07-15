@@ -53,20 +53,20 @@ namespace Schyntax.RedisLock
             return lastRun;
         }
         
-        public ScheduledTaskAsyncCallback Wrap(ScheduledTaskCallback callback, Func<ScheduledTask, DateTime, bool> shouldTryToRun = null, Action<ScheduledTask, DateTime, bool> afterLockCheck = null)
+        public ScheduledTaskAsyncCallback Wrap(ScheduledTaskCallback callback, Func<ScheduledTask, DateTime, bool> shouldTryToRun = null)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
 
-            return GetWrappedCallback(callback, null, shouldTryToRun, afterLockCheck);
+            return GetWrappedCallback(callback, null, shouldTryToRun);
         }
         
-        public ScheduledTaskAsyncCallback WrapAsync(ScheduledTaskAsyncCallback asyncCallback, Func<ScheduledTask, DateTime, bool> shouldTryToRun = null, Action<ScheduledTask, DateTime, bool> afterLockCheck = null)
+        public ScheduledTaskAsyncCallback WrapAsync(ScheduledTaskAsyncCallback asyncCallback, Func<ScheduledTask, DateTime, bool> shouldTryToRun = null)
         {
             if (asyncCallback == null)
                 throw new ArgumentNullException(nameof(asyncCallback));
 
-            return GetWrappedCallback(null, asyncCallback, shouldTryToRun, afterLockCheck);
+            return GetWrappedCallback(null, asyncCallback, shouldTryToRun);
         }
 
         private const string REDIS_LOCK_SCRIPT_BODY = @"
@@ -83,8 +83,7 @@ end
         private ScheduledTaskAsyncCallback GetWrappedCallback(
             ScheduledTaskCallback originalCallback, 
             ScheduledTaskAsyncCallback originalAsyncCallback, 
-            Func<ScheduledTask, DateTime, bool> shouldTryToRun,
-            Action<ScheduledTask, DateTime, bool> afterLockCheck)
+            Func<ScheduledTask, DateTime, bool> shouldTryToRun)
         {
             var host = _machineName;
             var lastKey = _lastKey;
@@ -107,8 +106,6 @@ end
                 var db = _getRedisDb();
                 var name = task.Name;
                 var lockAcquired = await db.ScriptEvaluateAsync(s_redisLockScript, new { lockKey, host, px, lastKey, name, lastLockValue }).ConfigureAwait(false);
-
-                afterLockCheck?.Invoke(task, timeIntendedToRun, (int) lockAcquired == 1);
 
                 if ((int)lockAcquired == 1)
                 {

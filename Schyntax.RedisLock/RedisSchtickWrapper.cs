@@ -8,6 +8,20 @@ namespace Schyntax.RedisLock
 {
     public class RedisSchtickWrapper
     {
+        public struct RedisSchtickEventInfo
+        {
+            public DateTime ScheduledTime { get; }
+            public DateTime ActualTime { get; }
+            public string Host { get; }
+
+            internal RedisSchtickEventInfo(DateTime scheduled, DateTime actual, string host)
+            {
+                ScheduledTime = scheduled;
+                ActualTime = actual;
+                Host = host;
+            }
+        }
+
         public Schtick Schtick { get; } = new Schtick();
 
         private readonly Func<IDatabase> _getRedisDb;
@@ -23,34 +37,37 @@ namespace Schyntax.RedisLock
             _machineName = machineName ?? Environment.MachineName;
         }
 
-        public DateTime GetLastRunTime(string taskName)
+        public RedisSchtickEventInfo GetLastRunInfo(string taskName)
         {
             var db = _getRedisDb();
             var value = db.HashGet(_lastKey, taskName);
-            return LastRunValueToDate(value);
+            return LastRunValueToInfo(value);
         }
 
-        public async Task<DateTime> GetLastRunTimeAsync(string taskName)
+        public async Task<RedisSchtickEventInfo> GetLastRunInfoAsync(string taskName)
         {
             var db = _getRedisDb();
             var value = await db.HashGetAsync(_lastKey, taskName);
-            return LastRunValueToDate(value);
+            return LastRunValueToInfo(value);
         }
 
-        private static DateTime LastRunValueToDate(RedisValue value)
+        private static RedisSchtickEventInfo LastRunValueToInfo(RedisValue value)
         {
-            DateTime lastRun = default(DateTime);
+            var info = default(RedisSchtickEventInfo);
             if (value.HasValue)
             {
                 string str = value;
-                var i = str.IndexOf(';');
-                if (i != -1)
+                var parts = str.Split(';');
+
+                DateTime scheduled;
+                DateTime actual;
+                if (parts.Length >= 3 && DateTime.TryParse(parts[0], out scheduled) && DateTime.TryParse(parts[1], out actual))
                 {
-                    DateTime.TryParse(str.Substring(0, i), out lastRun);
+                    return new RedisSchtickEventInfo(scheduled, actual, parts[2]);
                 }
             }
 
-            return lastRun;
+            return info;
         }
         
         public ScheduledTaskAsyncCallback Wrap(ScheduledTaskCallback callback, Func<ScheduledTask, DateTime, bool> shouldTryToRun = null)

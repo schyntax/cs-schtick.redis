@@ -3,7 +3,7 @@
 #---------------------------------#
 
 environment:
-  NUGET_RELEASE_VERSION: 0.9.1
+  NUGET_RELEASE_VERSION: 0.11.0
   NUGET_FILE: Schyntax.RedisLock\Schyntax.RedisLock.nuspec
   ASSEMBLY_FILE: Schyntax.RedisLock\Properties\AssemblyInfo.cs
 

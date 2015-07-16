@@ -1,5 +1,8 @@
 # Schyntax.RedisLock
 
+[![NuGet version](https://badge.fury.io/nu/Schyntax.RedisLock.svg)](http://badge.fury.io/nu/Schyntax.RedisLock)
+[![Build status](https://ci.appveyor.com/api/projects/status/onocaanycxgkuc94/branch/master?svg=true)](https://ci.appveyor.com/project/bretcope/cs-schyntax-redislock/branch/master)
+
 Uses Redis to provide a distributed lock so that for each iteration of a task, the callback will only be called on one server.
 
 # Basic Usage

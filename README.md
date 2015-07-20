@@ -1,9 +1,9 @@
-# Schyntax.RedisLock
+# Schtick.Redis
 
-[![NuGet version](https://badge.fury.io/nu/Schyntax.RedisLock.svg)](http://badge.fury.io/nu/Schyntax.RedisLock)
-[![Build status](https://ci.appveyor.com/api/projects/status/onocaanycxgkuc94/branch/master?svg=true)](https://ci.appveyor.com/project/bretcope/cs-schyntax-redislock/branch/master)
+[![NuGet version](https://badge.fury.io/nu/Schtick.Redis.svg)](http://badge.fury.io/nu/Schtick.Redis)
+[![Build status](https://ci.appveyor.com/api/projects/status/otpnwvgrtt8oh20y/branch/master?svg=true)](https://ci.appveyor.com/project/bretcope/cs-schtick-redis/branch/master)
 
-Uses Redis to provide a distributed lock so that for each iteration of a task, the callback will only be called on one server.
+Built on top of the [Schtick](https://github.com/schyntax/cs-schtick) scheduled task runner. Uses Redis to provide a distributed lock so that for each iteration of a task, the callback will only be called on one server.
 
 # Basic Usage
 

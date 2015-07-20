@@ -3,18 +3,18 @@
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
-    <title>Schyntax.RedisLock</title>
+    <title>Schtick.Redis</title>
     <authors>Bret Copeland</authors>
     <owners>Bret Copeland</owners>
-    <projectUrl>https://github.com/schyntax/cs-Schyntax.RedisLock</projectUrl>
+    <projectUrl>https://github.com/schyntax/cs-schtick.redis</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2015</copyright>
-    <tags>Schedule Scheduler Task Runner</tags>
+    <tags>Schyntax Schtick Schedule Task Runner</tags>
     <dependencies>
       <dependency id="StackExchange.Redis" version="1.0.450"/>
-      <dependency id="Schyntax" version="0.11.0"/>
+      <dependency id="Schtick" version="1.0.0"/>
     </dependencies>
   </metadata>
 </package>

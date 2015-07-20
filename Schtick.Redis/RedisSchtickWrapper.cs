@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 
-namespace Schyntax.RedisLock
+namespace Schyntax
 {
     public class RedisSchtickWrapper
     {

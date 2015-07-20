@@ -7,8 +7,8 @@
     <ProjectGuid>{F133ACFD-B078-4ECF-A422-220B62A2E847}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Schyntax.RedisLock.Tests</RootNamespace>
-    <AssemblyName>Schyntax.RedisLock.Tests</AssemblyName>
+    <RootNamespace>Schyntax.Tests</RootNamespace>
+    <AssemblyName>Schtick.Redis.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,8 +34,12 @@
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Schyntax, Version=0.11.0.26, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Schyntax.0.11.0\lib\net45\Schyntax.dll</HintPath>
+    <Reference Include="Schtick, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Schtick.1.0.0\lib\net45\Schtick.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Schyntax, Version=1.0.0.30, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Schyntax.1.0.0\lib\net45\Schyntax.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
@@ -59,9 +63,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Schyntax.RedisLock\Schyntax.RedisLock.csproj">
+    <ProjectReference Include="..\Schtick.Redis\Schtick.Redis.csproj">
       <Project>{a7f32936-854d-4051-9c32-0f22e68e8b6f}</Project>
-      <Name>Schyntax.RedisLock</Name>
+      <Name>Schtick.Redis</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

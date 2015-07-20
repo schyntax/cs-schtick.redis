@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schyntax.RedisLock", "Schyntax.RedisLock\Schyntax.RedisLock.csproj", "{A7F32936-854D-4051-9C32-0F22E68E8B6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schtick.Redis", "Schtick.Redis\Schtick.Redis.csproj", "{A7F32936-854D-4051-9C32-0F22E68E8B6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schyntax.RedisLock.Tests", "Schyntax.RedisLock.Tests\Schyntax.RedisLock.Tests.csproj", "{F133ACFD-B078-4ECF-A422-220B62A2E847}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schtick.Redis.Tests", "Schtick.Redis.Tests\Schtick.Redis.Tests.csproj", "{F133ACFD-B078-4ECF-A422-220B62A2E847}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{84DFDD9B-F967-4BD5-B6D6-145528C9AE9C}"
 	ProjectSection(SolutionItems) = preProject

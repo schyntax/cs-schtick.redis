@@ -4,7 +4,7 @@ using System.Threading;
 using NUnit.Framework;
 using StackExchange.Redis;
 
-namespace Schyntax.RedisLock.Tests
+namespace Schyntax.Tests
 {
     [TestFixture]
     public class Tests
@@ -69,7 +69,7 @@ namespace Schyntax.RedisLock.Tests
             {
                 var schtick = combos[i].Schtick;
                 var wrapper = combos[i].Wrapper;
-                tasks[i] = schtick.AddTask(name, schedule, wrapper.Wrap(callback));
+                tasks[i] = schtick.AddAsyncTask(name, schedule, wrapper.Wrap(callback));
             }
 
             return tasks;

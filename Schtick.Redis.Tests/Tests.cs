@@ -22,7 +22,7 @@ namespace Schyntax.Tests
             var combos = CreateCombosArray(4, () => redis.GetDatabase());
 
             var locker = new object();
-            var runs = new HashSet<DateTime>();
+            var runs = new HashSet<DateTimeOffset>();
             var runCount = 0;
 
             // add a task and make sure it only executes on one "server"

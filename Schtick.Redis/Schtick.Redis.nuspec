@@ -14,7 +14,7 @@
     <tags>Schyntax Schtick Schedule Task Runner</tags>
     <dependencies>
       <dependency id="StackExchange.Redis" version="1.0.450"/>
-      <dependency id="Schtick" version="1.0.0"/>
+      <dependency id="Schtick" version="1.0.1"/>
     </dependencies>
   </metadata>
 </package>

@@ -8,11 +8,11 @@ namespace Schyntax
     {
         public struct RedisSchtickEventInfo
         {
-            public DateTime ScheduledTime { get; }
-            public DateTime ActualTime { get; }
+            public DateTimeOffset ScheduledTime { get; }
+            public DateTimeOffset ActualTime { get; }
             public string Host { get; }
 
-            internal RedisSchtickEventInfo(DateTime scheduled, DateTime actual, string host)
+            internal RedisSchtickEventInfo(DateTimeOffset scheduled, DateTimeOffset actual, string host)
             {
                 ScheduledTime = scheduled;
                 ActualTime = actual;
@@ -57,9 +57,9 @@ namespace Schyntax
                 string str = value;
                 var parts = str.Split(';');
 
-                DateTime scheduled;
-                DateTime actual;
-                if (parts.Length >= 3 && DateTime.TryParse(parts[0], out scheduled) && DateTime.TryParse(parts[1], out actual))
+                DateTimeOffset scheduled;
+                DateTimeOffset actual;
+                if (parts.Length >= 3 && DateTimeOffset.TryParse(parts[0], out scheduled) && DateTimeOffset.TryParse(parts[1], out actual))
                 {
                     return new RedisSchtickEventInfo(scheduled, actual, parts[2]);
                 }
@@ -68,7 +68,7 @@ namespace Schyntax
             return info;
         }
         
-        public ScheduledTaskAsyncCallback Wrap(ScheduledTaskCallback callback, Func<ScheduledTask, DateTime, bool> shouldTryToRun = null)
+        public ScheduledTaskAsyncCallback Wrap(ScheduledTaskCallback callback, Func<ScheduledTask, DateTimeOffset, bool> shouldTryToRun = null)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
@@ -76,7 +76,7 @@ namespace Schyntax
             return GetWrappedCallback(callback, null, shouldTryToRun);
         }
         
-        public ScheduledTaskAsyncCallback WrapAsync(ScheduledTaskAsyncCallback asyncCallback, Func<ScheduledTask, DateTime, bool> shouldTryToRun = null)
+        public ScheduledTaskAsyncCallback WrapAsync(ScheduledTaskAsyncCallback asyncCallback, Func<ScheduledTask, DateTimeOffset, bool> shouldTryToRun = null)
         {
             if (asyncCallback == null)
                 throw new ArgumentNullException(nameof(asyncCallback));
@@ -98,7 +98,7 @@ end
         private ScheduledTaskAsyncCallback GetWrappedCallback(
             ScheduledTaskCallback originalCallback, 
             ScheduledTaskAsyncCallback originalAsyncCallback, 
-            Func<ScheduledTask, DateTime, bool> shouldTryToRun)
+            Func<ScheduledTask, DateTimeOffset, bool> shouldTryToRun)
         {
             var host = _machineName;
             var lastKey = _lastKey;
@@ -110,7 +110,7 @@ end
 
                 var iso = timeIntendedToRun.ToString("o");
                 RedisKey lockKey = _keyPrefix + ";" + task.Name + ";" + iso;
-                var lastLockValue = iso + ";" + DateTime.UtcNow.ToString("o") + ";" + host;
+                var lastLockValue = iso + ";" + DateTimeOffset.UtcNow.ToString("o") + ";" + host;
 
                 // set the redis lock for one hour longer than the window
                 var window = task.Window;

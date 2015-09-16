@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 
@@ -120,7 +120,11 @@ end
                 // see if we can get the lock on this task
                 var db = _getRedisDb();
                 var name = task.Name;
-                var lockAcquired = await db.ScriptEvaluateAsync(s_redisLockScript, new { lockKey, host, px, lastKey, name, lastLockValue }).ConfigureAwait(false);
+                var lockAcquired = await db.ScriptEvaluateAsync(
+                    s_redisLockScript,
+                    new { lockKey, host, px, lastKey, name, lastLockValue },
+                    flags: CommandFlags.DemandMaster
+                ).ConfigureAwait(false);
 
                 if ((int)lockAcquired == 1)
                 {

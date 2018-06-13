@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <Version>2.0.0-alpha</Version>
+        <Version>2.0.0</Version>
         <Authors>Bret Copeland</Authors>
         <Product>Schtick.Redis</Product>
         <PackageProjectUrl>https://github.com/schyntax/cs-schtick.redis</PackageProjectUrl>

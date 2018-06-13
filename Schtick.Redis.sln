@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schtick.Redis", "Schtick.Redis\Schtick.Redis.csproj", "{A7F32936-854D-4051-9C32-0F22E68E8B6F}"
 EndProject
@@ -12,9 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
+		build.cmd = build.cmd
+		build.ps1 = build.ps1
 		LICENSE.MIT = LICENSE.MIT
 		README.md = README.md
-		Scripts\SetNugetVersion.ps1 = Scripts\SetNugetVersion.ps1
 	EndProjectSection
 EndProject
 Global
@@ -34,5 +35,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {814E4CE2-D770-4134-BF15-342A89E68438}
 	EndGlobalSection
 EndGlobal

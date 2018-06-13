@@ -10,8 +10,8 @@
         <PackageTags>Schyntax Schtick Schedule Task Runner</PackageTags>
     </PropertyGroup>
     <ItemGroup>
-      <PackageReference Include="Schtick" Version="2.0.0-alpha-17" />
-      <PackageReference Include="Schyntax" Version="2.0.0-alpha-62" />
+      <PackageReference Include="Schtick" Version="2.0.1" />
+      <PackageReference Include="Schyntax" Version="2.0.1" />
       <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
     </ItemGroup>
 </Project>
